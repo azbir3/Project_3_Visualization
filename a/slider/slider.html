@@ -1,0 +1,63 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="d3.slider.css" media="screen" />
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+		<script src="d3.v3.min.js"></script>
+		<script src="d3.slider.js"></script>
+		<script type="text/javascript">
+			var sliderObj;
+			$(function() {
+				var tickFormatter = function(d) {
+					switch(d) {
+						case 1: return "January";
+						case 2: return "February";
+						case 3: return "March";
+						case 4: return "April";
+						case 5: return "May";
+						case 6: return "June";
+						case 7: return "July";
+						case 8: return "August";
+						case 9: return "September";
+						case 10: return "October";
+						case 11: return "November";
+					}
+					return "December";
+				}
+				// Initialize slider
+				var slider = d3.slider()
+					.min(1)
+					.max(12)
+					.ticks(12)
+					.stepValues([1,2,3,4,5,6,7,8,9,10,11,12])
+					.showRange(true)
+					.tickFormat(tickFormatter)
+					.value(12);
+				// Render the slider in the div
+				sliderObj = d3.select('#slider').call(slider);
+			});
+			
+			//returns month number
+			function getSliderSelection() {
+				month = $(".dragger").find("text").html();
+				switch(month) {
+					case "January": return 1;
+					case "February": return 2;
+					case "March": return 3;
+					case "April": return 4;
+					case "May": return 5;
+					case "June": return 6;
+					case "July": return 7;
+					case "August": return 8;
+					case "September": return 9;
+					case "October": return 10;
+					case "November": return 11;
+				}
+				return 12;
+			}
+		</script>
+	</head>
+	
+	<body>
+		<div id="slider"></div>
+	</body>
+</html>

@@ -1,0 +1,7 @@
+NYC_Traffic folder hold all that is needed to run visualization
+charts for Project 3, which are saved in "charts" folder.
+
+The plots are prepared using dimplesJS library.  In order to run
+the files please visit -  https://github.com/PMSI-AlignAlytics/dimple/wiki#installing-the-examples
+
+To look at examples and other support on line visit -  http://dimplejs.org/examples_index.html

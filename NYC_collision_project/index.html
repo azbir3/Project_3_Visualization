@@ -233,7 +233,7 @@
 	</div>
     <div id="map"></div>
 	<div id="timeframe">
-		<pre style="margin-top: 0px;">From Date: <input type="text" size="15" id="date1" name="date1" value="2016-12-01 09:00" />   To Date: <input type="text" size="15" id="date2" name="date2" value="2016-12-01 12:00" /></pre>
+		<pre style="margin-top: 0px;">From Date: <input type="text" size="15" id="date1" name="date1" value="2018-12-01 09:00" />   To Date: <input type="text" size="15" id="date2" name="date2" value="2018-12-01 12:00" /></pre>
 		
 		<link rel="stylesheet" type="text/css" href="files/css/d3.slider.css" media="screen" />
 		<script src="files/js/d3.v3.min.js"></script>
@@ -294,8 +294,8 @@
 			<div id="yearSelector" style="float:left;">
 				Select Year:
 				<select id="yearSelect">
-					<option value="2015">2015</option>
-					<option value="2016">2016</option>
+					<option value="2017">2017</option>
+					<option value="2018">2018</option>
 				</select>
 			</div>
 			<div id="slider" style="margin-top:-24px;"></div>
@@ -310,77 +310,77 @@
 		var lastYearSelection;
 		
 		var animationDates = [
-			{fromYear: 2015, fromMonth: 1, fromDate: 1, fromHour:0, fromTime: 0, 
-				toYear: 2015, toMonth: 1, toDate: 31, toHour:23, toTime: 59},
+			{fromYear: 2017, fromMonth: 1, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2017, toMonth: 1, toDate: 31, toHour:23, toTime: 59},
 				
-			{fromYear: 2015, fromMonth: 2, fromDate: 1, fromHour:0, fromTime: 0, 
-				toYear: 2015, toMonth: 2, toDate: 28, toHour:23, toTime: 59},
+			{fromYear: 2017, fromMonth: 2, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2017, toMonth: 2, toDate: 28, toHour:23, toTime: 59},
 				
-			{fromYear: 2015, fromMonth: 3, fromDate: 1, fromHour:0, fromTime: 0, 
-				toYear: 2015, toMonth: 3, toDate: 31, toHour:23, toTime: 59},
+			{fromYear: 2017, fromMonth: 3, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2017, toMonth: 3, toDate: 31, toHour:23, toTime: 59},
 				
-			{fromYear: 2015, fromMonth: 4, fromDate: 1, fromHour:0, fromTime: 0, 
-				toYear: 2015, toMonth: 4, toDate: 30, toHour:23, toTime: 59},
+			{fromYear: 2017, fromMonth: 4, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2017, toMonth: 4, toDate: 30, toHour:23, toTime: 59},
 			
-			{fromYear: 2015, fromMonth: 5, fromDate: 1, fromHour:0, fromTime: 0, 
-				toYear: 2015, toMonth: 5, toDate: 31, toHour:23, toTime: 59},
+			{fromYear: 2017, fromMonth: 5, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2017, toMonth: 5, toDate: 31, toHour:23, toTime: 59},
 			
-			{fromYear: 2015, fromMonth: 6, fromDate: 1, fromHour:0, fromTime: 0, 
-				toYear: 2015, toMonth: 6, toDate: 30, toHour:23, toTime: 59},
+			{fromYear: 2017, fromMonth: 6, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2017, toMonth: 6, toDate: 30, toHour:23, toTime: 59},
 				
-			{fromYear: 2015, fromMonth: 7, fromDate: 1, fromHour:0, fromTime: 0, 
-				toYear: 2015, toMonth: 7, toDate: 31, toHour:23, toTime: 59},
+			{fromYear: 2017, fromMonth: 7, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2017, toMonth: 7, toDate: 31, toHour:23, toTime: 59},
 				
-			{fromYear: 2015, fromMonth: 8, fromDate: 1, fromHour:0, fromTime: 0, 
-				toYear: 2015, toMonth: 8, toDate: 31, toHour:23, toTime: 59},
+			{fromYear: 2017, fromMonth: 8, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2017, toMonth: 8, toDate: 31, toHour:23, toTime: 59},
 				
-			{fromYear: 2015, fromMonth: 9, fromDate: 1, fromHour:0, fromTime: 0, 
-				toYear: 2015, toMonth: 9, toDate: 30, toHour:23, toTime: 59},
+			{fromYear: 2017, fromMonth: 9, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2017, toMonth: 9, toDate: 30, toHour:23, toTime: 59},
 				
-			{fromYear: 2015, fromMonth: 10, fromDate: 1, fromHour:0, fromTime: 0, 
-				toYear: 2015, toMonth: 10, toDate: 31, toHour:23, toTime: 59},
+			{fromYear: 2017, fromMonth: 10, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2017, toMonth: 10, toDate: 31, toHour:23, toTime: 59},
 				
-			{fromYear: 2015, fromMonth: 11, fromDate: 1, fromHour:0, fromTime: 0, 
-				toYear: 2015, toMonth: 11, toDate: 30, toHour:23, toTime: 59},
+			{fromYear: 2017, fromMonth: 11, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2017, toMonth: 11, toDate: 30, toHour:23, toTime: 59},
 				
-			{fromYear: 2015, fromMonth: 12, fromDate: 1, fromHour:0, fromTime: 0, 
-				toYear: 2015, toMonth: 12, toDate: 31, toHour:23, toTime: 59},
+			{fromYear: 2017, fromMonth: 12, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2017, toMonth: 12, toDate: 31, toHour:23, toTime: 59},
 			
-			{fromYear: 2016, fromMonth: 1, fromDate: 1, fromHour:0, fromTime: 0, 
-				toYear: 2016, toMonth: 1, toDate: 31, toHour:23, toTime: 59},
+			{fromYear: 2018, fromMonth: 1, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2018, toMonth: 1, toDate: 31, toHour:23, toTime: 59},
 				
-			{fromYear: 2016, fromMonth: 2, fromDate: 1, fromHour:0, fromTime: 0, 
-				toYear: 2016, toMonth: 2, toDate: 29, toHour:23, toTime: 59},
+			{fromYear: 2018, fromMonth: 2, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2018, toMonth: 2, toDate: 29, toHour:23, toTime: 59},
 				
-			{fromYear: 2016, fromMonth: 3, fromDate: 1, fromHour:0, fromTime: 0, 
-				toYear: 2016, toMonth: 3, toDate: 31, toHour:23, toTime: 59},
+			{fromYear: 2018, fromMonth: 3, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2018, toMonth: 3, toDate: 31, toHour:23, toTime: 59},
 				
-			{fromYear: 2016, fromMonth: 4, fromDate: 1, fromHour:0, fromTime: 0, 
-				toYear: 2016, toMonth: 4, toDate: 30, toHour:23, toTime: 59},
+			{fromYear: 2018, fromMonth: 4, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2018, toMonth: 4, toDate: 30, toHour:23, toTime: 59},
 			
-			{fromYear: 2016, fromMonth: 5, fromDate: 1, fromHour:0, fromTime: 0, 
-				toYear: 2016, toMonth: 5, toDate: 31, toHour:23, toTime: 59},
+			{fromYear: 2018, fromMonth: 5, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2018, toMonth: 5, toDate: 31, toHour:23, toTime: 59},
 			
-			{fromYear: 2016, fromMonth: 6, fromDate: 1, fromHour:0, fromTime: 0, 
-				toYear: 2016, toMonth: 6, toDate: 30, toHour:23, toTime: 59},
+			{fromYear: 2018, fromMonth: 6, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2018, toMonth: 6, toDate: 30, toHour:23, toTime: 59},
 				
-			{fromYear: 2016, fromMonth: 7, fromDate: 1, fromHour:0, fromTime: 0, 
-				toYear: 2016, toMonth: 7, toDate: 31, toHour:23, toTime: 59},
+			{fromYear: 2018, fromMonth: 7, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2018, toMonth: 7, toDate: 31, toHour:23, toTime: 59},
 				
-			{fromYear: 2016, fromMonth: 8, fromDate: 1, fromHour:0, fromTime: 0, 
-				toYear: 2016, toMonth: 8, toDate: 31, toHour:23, toTime: 59},
+			{fromYear: 2018, fromMonth: 8, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2018, toMonth: 8, toDate: 31, toHour:23, toTime: 59},
 				
-			{fromYear: 2016, fromMonth: 9, fromDate: 1, fromHour:0, fromTime: 0, 
-				toYear: 2016, toMonth: 9, toDate: 30, toHour:23, toTime: 59},
+			{fromYear: 2018, fromMonth: 9, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2018, toMonth: 9, toDate: 30, toHour:23, toTime: 59},
 				
-			{fromYear: 2016, fromMonth: 10, fromDate: 1, fromHour:0, fromTime: 0, 
-				toYear: 2016, toMonth: 10, toDate: 31, toHour:23, toTime: 59},
+			{fromYear: 2018, fromMonth: 10, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2018, toMonth: 10, toDate: 31, toHour:23, toTime: 59},
 				
-			{fromYear: 2016, fromMonth: 11, fromDate: 1, fromHour:0, fromTime: 0, 
-				toYear: 2016, toMonth: 11, toDate: 30, toHour:23, toTime: 59},
+			{fromYear: 2018, fromMonth: 11, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2018, toMonth: 11, toDate: 30, toHour:23, toTime: 59},
 				
-			{fromYear: 2016, fromMonth: 12, fromDate: 1, fromHour:0, fromTime: 0, 
-				toYear: 2016, toMonth: 12, toDate: 31, toHour:23, toTime: 59}
+			{fromYear: 2018, fromMonth: 12, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2018, toMonth: 12, toDate: 31, toHour:23, toTime: 59}
 		];
 		var animationCounter = 0;
 		
@@ -599,7 +599,7 @@
 			
 			initializeCollisionMappings();
 			
-			urlToLoad = constructBasicApiUrl(2016, 12, 1, 9, 0, 2016, 12, 1, 12, 0);
+			urlToLoad = constructBasicApiUrl(2018, 12, 1, 9, 0, 2018, 12, 1, 12, 0);
 			getResponseForQuery(urlToLoad, plotIncidentCollectionOnMap, refreshMarkerCluster, addInfoWindows);
 			
 			map.addListener('click', function(event) {
@@ -623,7 +623,8 @@
     </script>
     <script src="files/markerclusterer.js"></script>
     <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyChd2Ze2htxzessDDQwNksk4XhGL0xMb-Y&callback=initMap">
-    </script>
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD__eQE_jBYW_VEumq4Y4X6pCiNTRU_C64&callback=initMap">
+    </script>                                        
   </body>
 </html>
+                                                     

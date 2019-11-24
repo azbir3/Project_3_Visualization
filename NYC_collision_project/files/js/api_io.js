@@ -26,9 +26,9 @@ function constructBasicApiUrl(fromYear, fromMonth, fromDate, fromHour, fromMinut
 	if(toMinute > 0 && toMinute < 10) {
 		toMinute = "0" + toMinute;
 	}
-	url += " AND date between '" + fromYear + "-" + fromMonth + "-" + fromDate + "T00:00:00.000' and "
+	url += " AND accident_date between '" + fromYear + "-" + fromMonth + "-" + fromDate + "T00:00:00.000' and "
 		+ "'" + toYear + "-" + toMonth + "-" + toDate + "T00:00:00.000'"
-		+ " AND time between '" + fromHour + ":" + fromMinute + "' and '" + toHour + ":" + toMinute + "'";
+		+ " AND accident_time between '" + fromHour + ":" + fromMinute + "' and '" + toHour + ":" + toMinute + "'";
 	return url;
 }
 
@@ -68,13 +68,13 @@ function processResponse(response) {
 			+ parseInt(incident.number_of_motorist_killed)
 			+ parseInt(incident.number_of_pedestrians_killed)
 			+ parseInt(incident.number_of_persons_killed);
-		
+	
 		entry = {
 			reason: reasonEntry,
 			injuries: injuriesEntry,
 			deaths: killedEntry,
 			location: locEntry,
-			infoContent: "Date of Incident: " + incident.date.split("T")[0]
+			infoContent: "Date of Incident: " + incident.date
 				+ "<br />Time of Incident: " + incident.time
 				+ "<br />ZipCode: " + incident.zip_code
 				+ "<br />Total Injured: " + injuriesEntry + "    Total Killed: " + killedEntry

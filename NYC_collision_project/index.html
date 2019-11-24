@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>aat404 - NYC Motor Vehicle Collisions</title>
+    <style>
+      #map {
+        height: 450px;
+		width: 1000px;
+		float: right;
+		margin-top: 10px;
+		margin-right: 10px;
+		border: 1px solid;
+		padding: 2px;
+      }
+	  
+	  #timeframe {
+		text-align: center;
+		height: 90px;
+		width: 1000px;
+		float: right;
+		border: 1px solid;
+		margin-top: 10px;
+		margin-right: 10px;
+		padding: 2px;
+	  }
+	  
+	  #filters {
+		height: 130px;
+		width: 200px;
+		float: left;
+		border: 1px solid;
+		margin-top: 10px;
+		margin-left: 10px;
+		padding: 2px;
+		font-size: 15px;
+	  }
+	  
+	  #legends {
+		height: 370px;
+		width: 200px;
+		float: left;
+		border: 1px solid;
+		margin-top: 160px;
+		margin-left: -205px;
+		padding: 2px;
+	  }
+	  
+	  #refresh {
+		height: 30px;
+		width: 200px;
+		float: left;
+		border: 1px solid;
+		margin-top: 545px;
+		margin-left: -205px;
+		padding: 2px;
+	  }
+	  
+	  #refreshButton {
+		background-color: #bbb;
+		display: block;
+		margin: 0px 0;
+		padding: 6px;
+		width: 100%;
+		font-size: 14px;
+		cursor: pointer;
+	  }
+      
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="files/js/collision_causes.js"></script>
+	<script src="files/js/api_io.js"></script>
+  </head>
+  <body>
+	<div id="filters">
+		Boroughs:
+		<br />
+		<br />
+		<input type="checkbox" id="enableBorough" name="enableBorough" value="enableBorough"> Enable Borough Filter?<br>
+		<hr />
+		<select style="font-size:15px;" id = "boroughFilter">
+			<option value="BROOKLYN">Brooklyn</option>
+			<option value="MANHATTAN">Manhattan</option>
+			<option value="QUEENS">Queens</option>
+			<option value="BRONX">Bronx</option>
+			<option value="STATEN ISLAND">Staten Island</option>
+		</select>
+		<hr />
+		<input type="checkbox" id="enableRepeatingFunction" name="enableRepeatingFunction" value="enableRepeatingFunction"> Enable Animation?
+	</div>
+	<div id="legends">
+		<table style="width:100%;border: 1px solid black;">
+			<tr>
+				<th>Symbol</th>
+				<th>Reason for Accident</th>
+			</tr>
+			<tr>
+				<td>
+					<svg height="14" width="14">
+					  <path d="M0 0 L14 0 L14 14 L0 14 Z" />
+					</svg>
+				</td>
+				<td>Vehicular Problems</td>
+			</tr>
+			
+			<tr>
+				<td>
+					<svg height="14" width="14">
+						<circle cx="7" cy="7" r="6" stroke="black" stroke-width="1" fill="black" />
+					</svg>
+				</td>
+				<td>Driver's Fault</td>
+			</tr>
+			
+			<tr>
+				<td>
+					<svg height="14" width="14">
+					  <path d="M7 0 L14 7 L7 14 L0 7 Z" />
+					</svg>
+				</td>
+				<td>Driver's Intoxication</td>
+			</tr>
+			
+			<tr>
+				<td>
+					<svg height="14" width="14">
+					  <path d="M7 0 L14 14 L0 14 Z" />
+					</svg>
+				</td>
+				<td>Improper Street Conditions</td>
+			</tr>
+			
+			<tr>
+				<td>
+					<svg height="14" width="14">
+					  <path d="M5 0 L9 0 L9 5 L14 5 L14 9 L9 9 L9 14 L5 14 L5 9 L0 9 L0 5 L5 5 Z" />
+					</svg>
+				</td>
+				<td>Driver's Health Issues</td>
+			</tr>
+			
+			<tr>
+				<td>
+					<svg height="14" width="14">
+					  <path d="M0 0 L9 0 L9 7 L4 7 L4 14 L0 14 Z" />
+					</svg>
+				</td>
+				<td>Passenger's Faults</td>
+			</tr>
+			
+			<tr>
+				<td>
+					<svg height="14" width="14">
+					  <path d="M5 0 L14 0 L14 14 L10 14 L10 7 L5 7 Z" />
+					</svg>
+				</td>
+				<td>Pedestrian's Faults</td>
+			</tr>
+			
+			<tr>
+				<td>
+					<svg height="14" width="14">
+					  <path d="M0 0 L2 0 L7 3 L12 0 L14 0 L14 2 L11 5 L14 6 L14 8 L11 9 L14 12 L14 14 L12 14 L7 11 L2 14 L0 14 L0 12 L3 9 L0 8 L0 6 L3 5 L0 2 Z" />
+					</svg>
+				</td>
+				<td>Not Specified</td>
+			</tr>
+		</table>
+		<hr />
+		<table style = "width: 100%; border: 1px solid black;">
+			<tr>
+				<td>Injuries:</td>
+				<td>
+					<svg height="12" width="12">
+						<circle cx="6" cy="6" r="5" stroke="#ffa64d" stroke-width="1" fill="#ffa64d" />
+					</svg>
+					
+					<svg height="14" width="14">
+						<circle cx="7" cy="7" r="6" stroke="#ff8c1a" stroke-width="1" fill="#ff8c1a" />
+					</svg>
+					
+					<svg height="16" width="16">
+						<circle cx="8" cy="8" r="7" stroke="#e67300" stroke-width="1" fill="#e67300" />
+					</svg>
+					
+					<svg height="18" width="18">
+						<circle cx="9" cy="9" r="8" stroke="#b35900" stroke-width="1" fill="#b35900" />
+					</svg>
+					
+					<svg height="20" width="20">
+						<circle cx="10" cy="10" r="9" stroke="#804000" stroke-width="1" fill="#804000" />
+					</svg>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><pre style="font-size:10px;">0  1   2   3   4+</pre></td>
+			</tr>
+			<tr>
+				<td>Deaths:</td>
+				<td>
+					<svg height="12" width="12">
+						<circle cx="6" cy="6" r="5" stroke="#ff6666" stroke-width="1" fill="#ff6666" />
+					</svg>
+					
+					<svg height="14" width="14">
+						<circle cx="7" cy="7" r="6" stroke="#ff3333" stroke-width="1" fill="#ff3333" />
+					</svg>
+					
+					<svg height="16" width="16">
+						<circle cx="8" cy="8" r="7" stroke="#ff0000" stroke-width="1" fill="#ff0000" />
+					</svg>
+					
+					<svg height="18" width="18">
+						<circle cx="9" cy="9" r="8" stroke="#cc0000" stroke-width="1" fill="#cc0000" />
+					</svg>
+					
+					<svg height="20" width="20">
+						<circle cx="10" cy="10" r="9" stroke="#990000" stroke-width="1" fill="#990000" />
+					</svg>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div id="refresh">
+		<button id = "refreshButton"><b>Refresh</b></button>
+	</div>
+    <div id="map"></div>
+	<div id="timeframe">
+		<pre style="margin-top: 0px;">From Date: <input type="text" size="15" id="date1" name="date1" value="2016-12-01 09:00" />   To Date: <input type="text" size="15" id="date2" name="date2" value="2016-12-01 12:00" /></pre>
+		
+		<link rel="stylesheet" type="text/css" href="files/css/d3.slider.css" media="screen" />
+		<script src="files/js/d3.v3.min.js"></script>
+		<script src="files/js/d3.slider.js"></script>
+		<script type="text/javascript">
+			var sliderObj;
+			$(function() {
+				var tickFormatter = function(d) {
+					switch(d) {
+						case 1: return "January";
+						case 2: return "February";
+						case 3: return "March";
+						case 4: return "April";
+						case 5: return "May";
+						case 6: return "June";
+						case 7: return "July";
+						case 8: return "August";
+						case 9: return "September";
+						case 10: return "October";
+						case 11: return "November";
+					}
+					return "December";
+				}
+				// Initialize slider
+				var slider = d3.slider()
+					.min(1)
+					.max(12)
+					.ticks(12)
+					.stepValues([1,2,3,4,5,6,7,8,9,10,11,12])
+					.showRange(true)
+					.tickFormat(tickFormatter)
+					.value(12);
+				// Render the slider in the div
+				sliderObj = d3.select('#slider').call(slider);
+			});
+			
+			//returns month number
+			function getSliderSelection() {
+				month = $(".dragger").find("text").html();
+				switch(month) {
+					case "January": return 1;
+					case "February": return 2;
+					case "March": return 3;
+					case "April": return 4;
+					case "May": return 5;
+					case "June": return 6;
+					case "July": return 7;
+					case "August": return 8;
+					case "September": return 9;
+					case "October": return 10;
+					case "November": return 11;
+				}
+				return 12;
+			}
+		</script>
+		
+		<div id="monthSelector">
+			<div id="yearSelector" style="float:left;">
+				Select Year:
+				<select id="yearSelect">
+					<option value="2015">2015</option>
+					<option value="2016">2016</option>
+				</select>
+			</div>
+			<div id="slider" style="margin-top:-24px;"></div>
+		</div>
+	</div>
+    <script>
+		var map;
+		var markers = [];
+		var markerCluster;
+		var infoWindows = [];
+		var lastMonthSelection;
+		var lastYearSelection;
+		
+		var animationDates = [
+			{fromYear: 2015, fromMonth: 1, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2015, toMonth: 1, toDate: 31, toHour:23, toTime: 59},
+				
+			{fromYear: 2015, fromMonth: 2, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2015, toMonth: 2, toDate: 28, toHour:23, toTime: 59},
+				
+			{fromYear: 2015, fromMonth: 3, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2015, toMonth: 3, toDate: 31, toHour:23, toTime: 59},
+				
+			{fromYear: 2015, fromMonth: 4, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2015, toMonth: 4, toDate: 30, toHour:23, toTime: 59},
+			
+			{fromYear: 2015, fromMonth: 5, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2015, toMonth: 5, toDate: 31, toHour:23, toTime: 59},
+			
+			{fromYear: 2015, fromMonth: 6, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2015, toMonth: 6, toDate: 30, toHour:23, toTime: 59},
+				
+			{fromYear: 2015, fromMonth: 7, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2015, toMonth: 7, toDate: 31, toHour:23, toTime: 59},
+				
+			{fromYear: 2015, fromMonth: 8, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2015, toMonth: 8, toDate: 31, toHour:23, toTime: 59},
+				
+			{fromYear: 2015, fromMonth: 9, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2015, toMonth: 9, toDate: 30, toHour:23, toTime: 59},
+				
+			{fromYear: 2015, fromMonth: 10, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2015, toMonth: 10, toDate: 31, toHour:23, toTime: 59},
+				
+			{fromYear: 2015, fromMonth: 11, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2015, toMonth: 11, toDate: 30, toHour:23, toTime: 59},
+				
+			{fromYear: 2015, fromMonth: 12, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2015, toMonth: 12, toDate: 31, toHour:23, toTime: 59},
+			
+			{fromYear: 2016, fromMonth: 1, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2016, toMonth: 1, toDate: 31, toHour:23, toTime: 59},
+				
+			{fromYear: 2016, fromMonth: 2, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2016, toMonth: 2, toDate: 29, toHour:23, toTime: 59},
+				
+			{fromYear: 2016, fromMonth: 3, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2016, toMonth: 3, toDate: 31, toHour:23, toTime: 59},
+				
+			{fromYear: 2016, fromMonth: 4, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2016, toMonth: 4, toDate: 30, toHour:23, toTime: 59},
+			
+			{fromYear: 2016, fromMonth: 5, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2016, toMonth: 5, toDate: 31, toHour:23, toTime: 59},
+			
+			{fromYear: 2016, fromMonth: 6, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2016, toMonth: 6, toDate: 30, toHour:23, toTime: 59},
+				
+			{fromYear: 2016, fromMonth: 7, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2016, toMonth: 7, toDate: 31, toHour:23, toTime: 59},
+				
+			{fromYear: 2016, fromMonth: 8, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2016, toMonth: 8, toDate: 31, toHour:23, toTime: 59},
+				
+			{fromYear: 2016, fromMonth: 9, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2016, toMonth: 9, toDate: 30, toHour:23, toTime: 59},
+				
+			{fromYear: 2016, fromMonth: 10, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2016, toMonth: 10, toDate: 31, toHour:23, toTime: 59},
+				
+			{fromYear: 2016, fromMonth: 11, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2016, toMonth: 11, toDate: 30, toHour:23, toTime: 59},
+				
+			{fromYear: 2016, fromMonth: 12, fromDate: 1, fromHour:0, fromTime: 0, 
+				toYear: 2016, toMonth: 12, toDate: 31, toHour:23, toTime: 59}
+		];
+		var animationCounter = 0;
+		
+		function daysInMonth(month, year) {
+			return new Date(year, month, 0).getDate();
+		}
+		
+		function executeAtEveryInterval(){
+			// do whatever you like here
+			if($("#enableRepeatingFunction").is(':checked')) {
+				urlToLoad = constructBasicApiUrl(animationDates[animationCounter].fromYear, 
+					animationDates[animationCounter].fromMonth, 
+					animationDates[animationCounter].fromDate, 
+					animationDates[animationCounter].fromHour, 
+					animationDates[animationCounter].fromTime, 
+					animationDates[animationCounter].toYear, 
+					animationDates[animationCounter].toMonth, 
+					animationDates[animationCounter].toDate, 
+					animationDates[animationCounter].toHour, 
+					animationDates[animationCounter].toTime);
+				
+				if($("#enableBorough").is(':checked')) {
+					urlToLoad = addEqualsConstraint(urlToLoad, 'borough', $("#boroughFilter").val());
+				}
+				
+				//sliderPage = document.querySelector("#sliderPage");
+				//sliderPage = sliderPage.contentDocument;
+				$("#timeframe").find("#date1").val(
+					animationDates[animationCounter].fromYear + "-" +
+					animationDates[animationCounter].fromMonth + "-" +
+					animationDates[animationCounter].fromDate + " " +
+					animationDates[animationCounter].fromHour + ":" +
+					animationDates[animationCounter].fromTime);
+				
+				$("#timeframe").find("#date2").val(
+					animationDates[animationCounter].toYear + "-" +
+					animationDates[animationCounter].toMonth + "-" +
+					animationDates[animationCounter].toDate + " " +
+					animationDates[animationCounter].toHour + ":" +
+					animationDates[animationCounter].toTime);
+				
+				getResponseForQuery(urlToLoad, plotIncidentCollectionOnMap, refreshMarkerCluster, addInfoWindows);
+				
+				animationCounter = (animationCounter + 1) % animationDates.length;
+			}
+
+			setTimeout(executeAtEveryInterval, 7000);
+		}
+		
+		function refreshDetailsForMonthYear(month, year) {
+			toDate = daysInMonth(month, year);
+			$("#timeframe").find("#date1").val(year + "-" + month + "-01 00:00:00");
+			$("#timeframe").find("#date2").val(year + "-" + month + "-" + toDate + " 23:59:59");
+			
+			urlToLoad = constructBasicApiUrl(year, month, 1, 0, 0, year, month, toDate, 23, 59);
+				
+			if($("#enableBorough").is(':checked')) {
+				urlToLoad = addEqualsConstraint(urlToLoad, 'borough', $("#boroughFilter").val());
+			}
+				
+			getResponseForQuery(urlToLoad, plotIncidentCollectionOnMap, refreshMarkerCluster, addInfoWindows);
+		}
+		
+		$(function() {
+			lastMonthSelection = getSliderSelection();
+			lastYearSelection = parseInt($("#yearSelect").val());
+			$("#yearSelect").change(function() {
+				if(lastYearSelection != parseInt($(this).val())) {
+					lastYearSelection = parseInt($(this).val());
+					refreshDetailsForMonthYear(lastMonthSelection, lastYearSelection);
+				}
+			});
+			
+			$("svg.d3slider-axis").click(function() {
+				if(getSliderSelection() != lastMonthSelection) {
+					lastMonthSelection = getSliderSelection();
+					refreshDetailsForMonthYear(getSliderSelection(), lastYearSelection);
+				}
+			});
+			
+			$("#refreshButton").click(function() {
+				//sliderPage = document.querySelector("#sliderPage");
+				//sliderPage = sliderPage.contentDocument;
+				date1 = $("#timeframe").find("#date1").val();
+				date2 = $("#timeframe").find("#date2").val();
+				tokens1 = date1.split(" ");
+				date1tokens = tokens1[0].split("-");
+				time1tokens = tokens1[1].split(":");
+				fromYear = parseInt(date1tokens[0]);
+				fromMonth = parseInt(date1tokens[1]);
+				fromDate = parseInt(date1tokens[2]);
+				fromHour = parseInt(time1tokens[0]);
+				fromMinute = parseInt(time1tokens[1]);
+				
+				tokens2 = date2.split(" ");
+				date2tokens = tokens2[0].split("-");
+				time2tokens = tokens2[1].split(":");
+				toYear = parseInt(date2tokens[0]);
+				toMonth = parseInt(date2tokens[1]);
+				toDate = parseInt(date2tokens[2]);
+				toHour = parseInt(time2tokens[0]);
+				toMinute = parseInt(time2tokens[1]);
+				
+				urlToLoad = constructBasicApiUrl(fromYear, fromMonth, fromDate, fromHour, fromMinute, 
+					toYear, toMonth, toDate, toHour, toMinute);
+				
+				if($("#enableBorough").is(':checked')) {
+					urlToLoad = addEqualsConstraint(urlToLoad, 'borough', $("#boroughFilter").val());
+				}
+				
+				getResponseForQuery(urlToLoad, plotIncidentCollectionOnMap, refreshMarkerCluster, addInfoWindows);
+			});
+		});
+		
+		function addMarkerToMap(mapObj, iconPath, iconSize, iconFillColor, iconFillOpacity, 
+			iconStrokeColor, iconStrokeOpacity, markerLocation, markerTitle) {
+			return new google.maps.Marker({
+				map: mapObj,
+				position: markerLocation,
+				icon: {
+					path: iconPath,
+					scale: iconSize,
+					fillColor: iconFillColor,
+					fillOpacity: iconFillOpacity,
+					strokeColor: iconStrokeColor,
+					strokeOpacity: iconStrokeOpacity
+				},
+				title: markerTitle
+			});
+		}
+		
+		function constructInfoWindow(infoContent) {
+			return new google.maps.InfoWindow({
+				content: infoContent
+			});
+		}
+		
+		function removeExistingMarkers() {
+			for(i = 0; i < markers.length; i++) {
+				markers[i].setMap(null);
+				google.maps.event.clearInstanceListeners(infoWindows[i]);  // just in case handlers continue to stick around
+				infoWindows[i].close();
+				infoWindows[i] = null;
+			}
+			markers = [];
+			if(markerCluster != null) {
+				markerCluster.clearMarkers();
+			}
+			infoWindows = [];
+		}
+		
+		function refreshMarkerCluster() {
+			markerCluster = new MarkerClusterer(map, markers, {imagePath: 'files/images/m'});
+		}
+		
+		function addInfoWindows() {
+			for(i = 0; i < markers.length; i++) {
+				associateInfoWindowWithMarker(infoWindows[i], markers[i]);
+			}
+		}
+		
+		function associateInfoWindowWithMarker(infoWindow, marker) {
+			google.maps.event.addListener(marker, 'click', function() {
+				infoWindow.open(map, this);
+			});
+		}
+		
+		function plotIncidentCollectionOnMap(incidentsCollection) {
+			removeExistingMarkers();
+			for(i = 0; i < incidentsCollection.length; i++) {
+				severityCount = incidentsCollection[i].deaths;
+				if(incidentsCollection[i].injuries > incidentsCollection[i].deaths) {
+					severityCount = incidentsCollection[i].injuries;
+				}
+				
+				collisionCategoryIndex = unspecifiedCategoryIndex;
+				if(collisionReasons[incidentsCollection[i].reason] != null) {
+					collisionCategoryIndex = collisionReasons[incidentsCollection[i].reason];
+				}
+				categoryObj = collisionReasonCategories[collisionCategoryIndex];
+				
+				//calculate which index of size to select for this incident
+				sizeIndex = 4;
+				switch(severityCount) {
+					case 0: sizeIndex = 0;
+							break;
+					case 1: sizeIndex = 1;
+							break;
+					case 2: sizeIndex = 2;
+							break;
+					case 3: sizeIndex = 3;
+							break;
+				}
+				size = symbolSizes[sizeIndex];
+				if(circleCategoryIndex == collisionCategoryIndex) {
+					size = circleSizes[sizeIndex];
+				}
+				
+				markerColor = deathColors[sizeIndex];
+				if(incidentsCollection[i].injuries > incidentsCollection[i].deaths) {
+					markerColor = injuryColors[sizeIndex];
+				}
+				
+				markers.push(addMarkerToMap(map, categoryObj.path, size, markerColor, 1,
+					markerColor, 1, incidentsCollection[i].location, incidentsCollection[i].reason));
+				infoWindows.push(constructInfoWindow(incidentsCollection[i].infoContent));
+			}
+		}
+		
+		function initMap() {
+			map = new google.maps.Map(document.getElementById('map'), {
+			  zoom: 10,
+			  center: {lat: 40.715994, lng: -73.940611},
+			  mapTypeId: 'roadmap'
+			});
+			
+			initializeCollisionMappings();
+			
+			urlToLoad = constructBasicApiUrl(2016, 12, 1, 9, 0, 2016, 12, 1, 12, 0);
+			getResponseForQuery(urlToLoad, plotIncidentCollectionOnMap, refreshMarkerCluster, addInfoWindows);
+			
+			map.addListener('click', function(event) {
+			  //console.log(event.latLng.lat() + " " + event.latLng.lng());
+			});
+			
+			executeAtEveryInterval();
+		}
+		
+		/*var locations = [
+			{lat: 40.730254, lng: -73.998695},
+			{lat: 40.690437, lng: -73.991829},
+			{lat: 40.688354, lng: -73.913894}
+		];
+		
+		var incidents = [
+			{reason: 'Aggressive Driving/Road Rage', injuries: 1, deaths: 1, location: {lat: 40.730254, lng: -73.998695}},
+			{reason: 'Aggressive Driving/Road Rage', injuries: 0, deaths: 2, location: {lat: 40.690437, lng: -73.991829}},
+			{reason: 'Aggressive Driving/Road Rage', injuries: 3, deaths: 1, location: {lat: 40.688354, lng: -73.913894}}
+		];*/
+    </script>
+    <script src="files/markerclusterer.js"></script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyChd2Ze2htxzessDDQwNksk4XhGL0xMb-Y&callback=initMap">
+    </script>
+  </body>
+</html>

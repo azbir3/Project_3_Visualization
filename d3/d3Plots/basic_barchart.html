@@ -40,7 +40,7 @@
     //Create category for color
     var c10 = d3.scale.category10();
     //Load data from external tsv file
-    d3.csv("borough_summary.csv", function(data){
+    d3.csv("../data/borough_summary.csv", function(data){
       //Set domain of x and y scales based on loaded data
       yScale.domain([0,d3.max(data, function(d){ return d.Percentage_of_Accidents; })]);
       xScale.domain(data.map(function(d){ return d.BOROUGH; }));

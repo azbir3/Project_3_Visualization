@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Injury Type</title>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+
+<body>
+
+  <div id="pie"></div>
+  
+  <h2> Type of Injury</h2>
+  <select id="selDataset" onchange="getData(this.value)">
+    <option>---</option>
+    <option value="datasetBX">BRONX</option>
+    <option value="datasetBR">BROOKLYN</option>
+    <option value="datasetMH">MANHATTAN</option>
+    <option value="datasetQS">QUEENS</option>
+    <option value="datasetSI">STATEN ISLAND</option>
+  </select>
+  <script src="donut_type_injury.js"></script>
+</body>
+
+</html>

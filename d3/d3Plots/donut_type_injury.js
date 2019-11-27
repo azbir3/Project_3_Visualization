@@ -64,5 +64,3 @@ function init(csvname, column) {
 }
   
 init("../data/injuryType_borough.csv", "Total_Accidents");
-  
-  

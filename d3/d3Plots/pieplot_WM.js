@@ -6,7 +6,7 @@ function init(csvname, column, labels) {
   {
       for ( var i=0; i < data.length; i++){
         values.push(data[i][column]);
-        labels.push(data[i][column]);
+        labels.push(data[i].BOROUGH);
       }
       var data = [{
         values: values,

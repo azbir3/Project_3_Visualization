@@ -58,6 +58,7 @@ var yAxis = d3.svg.axis().scale(y)
 
 // Define the line
 var accidents = d3.svg.line()	
+    .interpolate("linear")
     .x(function(d) { return x(d.date); })
     .y(function(d) { return y(d.incident); });
     
@@ -87,16 +88,18 @@ d3.csv("../data/line_monthYr_borough.csv", function(error, data) {
         .key(function(d) {return d.borough;})
         .entries(data);
 
-    var color = d3.scale.category10();   // set the colour scale
+    // set the colour scale
+    var color = d3.scale.category10();   
 
-    legendSpace = width/dataNest.length; // spacing for the legend
+    // spacing for the legend
+    legendSpace = width/dataNest.length; 
 
     // Loop through each borough / key
     dataNest.forEach(function(d, i) { 
 
         svg.append("path")
             .attr("class", "line")
-            .style("stroke", function() { // Add the colours dynamically
+            .style("stroke", function() { // Add the colors dynamically
                 return d.color = color(d.key); })
             .attr("id", 'tag'+d.key.replace(/\s+/g, '')) // assign ID
             .attr("d", accidents(d.values));
@@ -192,7 +195,7 @@ d3.csv("../data/line_monthYr_borough.csv", function(error, data) {
     //       .style("opacity", "1");
     //   })
     //   .on('mousemove', function () { // mouse moving over canvas
-    //   debugger;
+    //   //debugger;
     //     var mouse = d3.mouse(this);
 
     //     d3.selectAll(".mouse-per-line")

@@ -90,8 +90,8 @@
     const tip = d3.tip()
       .attr('class', 'd3-tip')
       .offset([-10, 0])
-      .html(function(d) {
-        return "<strong>No of Accidents:</strong> <span style='color:red'>" + d.Percent_of_Accidents + "</span>";
+      .html(function(dt) {
+        return "<strong>No of Accidents:</strong> <span style='color:red'>" + dt.Percent_of_Accidents + "</span>";
       })
 
     svg.call(tip);
@@ -102,16 +102,7 @@
       //Set domain of x and y scales based on loaded data
       yScale.domain([0,d3.max(data, function(d){ return d.Percentage_of_Accidents; })]);
       xScale.domain(data.map(function(d){ return d.BOROUGH; }));
-      
-      // //Create X and Y Axis based on scales and data
-      // const xAxis = d3.svg.axis()
-      //           .scale(xScale)
-      //           .orient("bottom");
-      // const yAxis = d3.svg.axis()
-      //           .scale(yScale)
-      //           .orient("left")
-      //           .tickFormat(formatPercent);
-      
+           
       //Add bars
       const bars = svg.selectAll("rect")
                     .data(data)
@@ -150,7 +141,7 @@
     });
     function type(dt) {
       dt.Number_of_Accidents = +dt.Number_of_Accidents;
-      return d;
+      return dt;
     }
   </script>
 </body>

@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>NYC Motor Vehicle Collision Report</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<style>
+body {font-family: "Times New Roman", Georgia, Serif;}
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Playfair Display";
+  letter-spacing: 5px;
+}
+</style>
+
+ <script src="../static/d3.min.js"></script>
+  <style type="text/css">
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: #000;
+      shape-rendering: crispEdges;
+    }
+    .x.axis path{
+      display: none;
+    }
+    body{
+      font: 12px arial;
+    }
+    #barchart{
+        margin-left: 250px;
+        float: left;
+        margin-top: 20px;
+     }
+
+    #lines{
+        margin-left: 250px;
+        float: left;
+        margin-top: 50px;
+    }
+    h1{
+        text-align: center;
+    }
+  </style>
+  <link rel="stylesheet" type="text/css" href="../static/main.css">
+
+<style> /* set the CSS */
+
+
+
+path {
+    stroke: steelblue;
+    stroke-width: 2;
+    fill: none;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: grey;
+    stroke-width: 1;
+    shape-rendering: crispEdges;
+}
+
+.legend {
+    font-size: 16px;
+    font-weight: bold;
+    text-anchor: middle;
+}
+a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.previous {
+  font-size: 20px;
+  background-color: #fcfcfc;
+  color: black;
+  margin-left: 900px;
+}
+
+.next {
+  font-size: 20px;
+  background-color: #879da7;
+  color: white;
+  margin-left: 820px;
+}
+
+.round {
+  border-radius: 50%;
+}
+</style>
+
+
+</head>
+
+<!--icon-->
+
+<link rel="shortcut icon" type="image/x-icon" href="../static/icon.png" />
+
+
+<p>
+
+
+<!-- Navbar (sit on top) -->
+	<div class="w3-top">
+  		<div class="w3-bar w3-blue-gray w3-padding-16 w3-card w3-opacity-min" style="letter-spacing:4px;">
+    		<a href="index.html" class="w3-bar-item w3-button w3-xxlarge  w3-margin-left w3-round-large">NYC Motor Vehicle Collision Report</a>
+    <!-- Right-sided navbar links. Hide them on small screens -->
+		<div class="w3-right w3-hide-medium w3-xlarge w3-margin-right">
+        <div class="w3-dropdown-hover w3-blue-gray">
+          <button  class="w3-bar-item w3-button w3-hover-white ">Chart</button>
+          <div class="w3-dropdown-content w3-bar-block   w3-round-xxlarge">
+            <a href="chart.html" class="w3-bar-item w3-button  w3-round-xlarge  w3-medium">Total Collisions</a>
+            <a href="chart2.html" class="w3-bar-item w3-button  w3-round-xlarge  w3-medium">Type of Injury</a>
+            <a href="chart3.html" class="w3-bar-item w3-button  w3-round-xlarge  w3-medium">Pie Charts</a>
+          </div>
+         </div>
+
+      <!--<a href="#" class="w3-bar-item w3-button   w3-round-large">Table</a>-->
+      <a href="initmap.html" class="w3-bar-item w3-button  w3-round-large">Map</a>
+		</div>
+  		</div>
+	</div>
+
+<!-- Header -->
+<header class="w3-display-container w3-content w3-wide" style="max-width:1600px;min-width:500px" id="home">
+  <img class=" w3-opacity-min" src="../static/head_image.jpg" alt="head image" width="1600" height="600">
+
+</header>
+<br/><br/><br/><br/>
+ <h1>Total Collisions per Borough</h1>
+    <div id="barchart"></div>
+  <script type="text/javascript">
+    //Set up margin and percentage formatter
+    var margin = {top:20, right: 30, bottom: 30, left:40};
+    var width = 800-margin.left-margin.right;
+    var height = 400-margin.top-margin.bottom;
+    var formatPercent = d3.format("%.0");
+    //Create SVG Element
+    var section = d3.select("#barchart")
+          .append("svg")
+          .attr({"width":width+margin.left+margin.right,"height":height+100+margin.top+margin.bottom})
+          .append("g")
+          .attr("transform","translate("+margin.left+","+margin.right+")");
+    //Create y  and yscale
+    var yScale = d3.scale.linear().range([height,0]);
+    var xScale = d3.scale.ordinal().rangeRoundBands([0,width],0.1,0.2);
+    //Create category for color
+    var c10 = d3.scale.category10();
+    //Load data from external tsv file
+    d3.csv("http://localhost:5000/borough_summary", function(data){
+      //Set domain of x and y scales based on loaded data
+      yScale.domain([0,d3.max(data, function(d){ return d.Percentage_of_Accidents; })]);
+      xScale.domain(data.map(function(d){ return d.BOROUGH; }));
+      //Create X and Y Axis based on scales and data
+      var xAxis = d3.svg.axis()
+                .scale(xScale)
+                .orient("bottom");
+      var yAxis = d3.svg.axis()
+                .scale(yScale)
+                .orient("left")
+                .tickFormat(formatPercent);
+      //Add bars
+      var bars = section.selectAll("rect")
+                    .data(data)
+                    .enter()
+                    .append("rect")
+                    .attr("class","bar")
+                    .attr("width", xScale.rangeBand())
+                    .attr("fill","steelblue")
+                    .attr("y","0")
+                    .transition()
+                    .ease("polyin")
+                    .duration(2000)
+                    .attr("fill", function(d,i){
+                      return c10(Math.random()*10*i);
+                    })
+                    .attr("y", function(d){
+                      return yScale(d.Percentage_of_Accidents);
+                    })
+                    .attr("x", function(d){
+                      return xScale(d.BOROUGH);
+                    })
+                    .attr("height", function(d){
+                      return height-yScale(d.Percentage_of_Accidents);
+                    });
+      //Add X Axis
+      section.append("g")
+        .attr("transform","translate(0,"+height+")")
+        .call(xAxis)
+        .attr("class","x axis");
+      //Add Y Axis
+      section.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
+    });
+  </script>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+    <div class="w3-col m3 w3-container w3-margin-top w3-margin-left w3-large"  >
+
+
+        <p class="w3-text-grey w3-xlarge">At a glance Brooklyn holds the lead of the number of accidents occurring among the five boroughs.  Staten Island is decidedly the safest borough to be out and about in.  However, given the concentration of tourists in Manhattan the odds are not bad at all.</p>
+
+    </div>
+
+
+<<br/><br/><br/><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<hr>
+<br><br><br><br><br>
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+    <h1>Monthly Collisions per Borough</h1>
+<br><br><br><br><br>
+<div id="lines"></div>
+<script>
+
+// Set the dimensions of the canvas / graph
+var margin = {top: 30, right: 30, bottom: 70, left: 50},
+    width = 900 - margin.left - margin.right,
+    height = 550 - margin.top - margin.bottom;
+
+// Parse the date / time
+var parseDate = d3.time.format("%b-%Y").parse;
+
+// Set the ranges
+var x = d3.time.scale().range([0, width]);
+var y = d3.scale.linear().range([height, 0]);
+
+// Define the axes
+var xAxis = d3.svg.axis().scale(x)
+    .orient("bottom").ticks(18);
+
+var yAxis = d3.svg.axis().scale(y)
+    .orient("left").ticks(5);
+
+// Define the line
+var accidents = d3.svg.line()
+    .interpolate("linear")
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.incident); });
+
+// Adds the svg canvas
+var svg = d3.select("body")
+    .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+        .attr("transform",
+              "translate(" + margin.left + "," + margin.top + ")");
+
+// Get the data
+d3.csv("http://localhost:5000/line_monthYr_borough_new", function(error, data) {
+    data.forEach(function(d) {
+		d.date = parseDate(d.date);
+		d.date=+d.date
+        d.incident = +d.incident;
+    });
+
+    // Scale the range of the data
+    x.domain(d3.extent(data, function(d) { return d.date; }));
+    y.domain([0, d3.max(data, function(d) { return d.incident; })]);
+
+    // Nest the entries by borough
+    var dataNest = d3.nest()
+        .key(function(d) {return d.borough;})
+        .entries(data);
+
+    // set the colour scale
+    var color = d3.scale.category10();
+
+    // spacing for the legend
+    legendSpace = width/dataNest.length;
+
+    // Loop through each borough / key
+    dataNest.forEach(function(d, i) {
+
+        svg.append("path")
+            .attr("class", "line")
+            .style("stroke", function() { // Add the colors dynamically
+                return d.color = color(d.key); })
+            .attr("id", 'tag'+d.key.replace(/\s+/g, '')) // assign ID
+            .attr("d", accidents(d.values));
+
+        // Add the Legend
+        svg.append("text")
+            .attr("x", (legendSpace/2)+i*legendSpace)  // space legend
+            .attr("y", height + (margin.bottom/2)+ 5)
+            .attr("class", "legend")    // style the legend
+            .style("fill", function() { // Add the colours dynamically
+                return d.color = color(d.key); })
+            .on("click", function(){
+                // Determine if current line is visible
+                var active   = d.active ? false : true,
+                newOpacity = active ? 0 : 1;
+                // Hide or show the elements based on the ID
+                d3.select("#tag"+d.key.replace(/\s+/g, ''))
+                    .transition().duration(100)
+                    .style("opacity", newOpacity);
+                // Update whether or not the elements are active
+                d.active = active;
+                })
+            .text(d.key);
+
+    });
+
+    // Add the X Axis
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+
+    // Add the Y Axis
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+        .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end")
+        .text("No of Accidents");
+
+    // //create a moving bar and accident balance for mouseover function
+    // var mouseG = svg.append("g")
+    //   .attr("class", "mouse-over-effects");
+
+    // mouseG.append("path") // this is the black vertical line to follow mouse
+    //   .attr("class", "mouse-line")
+    //   .style("stroke", "black")
+    //   .style("stroke-width", "1px")
+    //   .style("opacity", "0");
+
+    // var lines = document.getElementsByClassName('line');
+
+    // var mousePerLine = mouseG.selectAll('.mouse-per-line')
+    //   .data(data)
+    //   .enter()
+    //   .append("g")
+    //   .attr("class", "mouse-per-line");
+
+    // mousePerLine.append("circle")
+    //   .attr("r", 7)
+    //   .style("stroke", function (d) {
+    //     return color(d.key);
+    //   })
+    //   .style("fill", "none")
+    //   .style("stroke-width", "1px")
+    //   .style("opacity", "0");
+
+    // mousePerLine.append("text")
+    //   .attr("transform", "translate(10,3)");
+
+    // mouseG.append('svg:rect') // append a rect to catch mouse movements on canvas
+    //   .attr('width', width) // can't catch mouse events on a g element
+    //   .attr('height', height)
+    //   .attr('fill', 'none')
+    //   .attr('pointer-events', 'all')
+    //   .on('mouseout', function () { // on mouse out hide line, circles and text
+    //     d3.select(".mouse-line")
+    //       .style("opacity", "0");
+    //     d3.selectAll(".mouse-per-line circle")
+    //       .style("opacity", "0");
+    //     d3.selectAll(".mouse-per-line text")
+    //       .style("opacity", "0");
+    //   })
+    //   .on('mouseover', function () { // on mouse in show line, circles and text
+    //     d3.select(".mouse-line")
+    //       .style("opacity", "1");
+    //     d3.selectAll(".mouse-per-line circle")
+    //       .style("opacity", "1");
+    //     d3.selectAll(".mouse-per-line text")
+    //       .style("opacity", "1");
+    //   })
+    //   .on('mousemove', function () { // mouse moving over canvas
+    //   //debugger;
+    //     var mouse = d3.mouse(this);
+
+    //     d3.selectAll(".mouse-per-line")
+    //       .attr("transform", function (d, i) {
+
+    //         var xDate = x.invert(mouse[0]),
+    //           bisect = d3.bisector(function (d) { return d.date; }).left;
+    //         idx = bisect(d.values, xDate);
+
+    //         d3.select(this).select('text')
+    //           .text(y.invert(y(d.values[idx].incident)).toFixed(2));
+
+    //         d3.select(".mouse-line")
+    //           .attr("d", function () {
+    //             var data = "M" + x(d.values[idx].date) + "," + height;
+    //             data += " " + x(d.values[idx].date) + "," + 0;
+    //             return data;
+    //           });
+    //         return "translate(" + x(d.values[idx].date) + "," + y(d.values[idx].incident) + ")";
+    //       });
+    //   });
+
+});
+
+</script>
+
+
+    <div class="w3-col m3 w3-container w3-margin-right w3-large"  >
+
+
+
+      <p class="w3-text-grey w3-xlarge">This chart is interactive; please click on the name of the borough you wish to exclude it from the comparison or include it back in.  Overall, the plot confirms that accident activity shows to be mostly consistent from year to year with a drop-in activity in the beginning of the year, followed by a spike during the second quarter.  Once again, Staten Island is the safest place to be and Brooklyn tops the chart as expected.</p>
+
+    </div>
+
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+
+<!-- <a href="#" class="previous">&laquo; Previous</a> -->
+<a href="chart2.html" class="next">Next Chart(Type of Injury) &raquo;</a>
+<br/><br/><br/>
+<hr>
+<br/>
+<br/>
+<br/>
+<footer class="w3-center w3-light-grey w3-padding-32">
+  <p class="w3-large">Made by Khalid Ettalii, Ryan Michels, Jingyi Xu, Alla Zbiru </p>
+</footer>
+
+</body>
+</html>

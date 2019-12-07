@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>NYC Motor Vehicle Collision Report</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<style>
+body {font-family: "Times New Roman", Georgia, Serif;}
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Playfair Display";
+  letter-spacing: 5px;
+}
+</style>
+
+<style> /* set the CSS */
+    #pie{
+        margin-left: 300px;
+        float: left;
+        margin-top: 20px;
+     }
+    h1{
+        text-align: center;
+
+     }
+    .previous {
+        font-size: 20px;
+        background-color: #fcfcfc;
+        color: black;
+        margin-left: 800px;
+     }
+
+
+</style>
+<link rel="shortcut icon" type="image/x-icon" href="../static/icon.png" />
+<body>
+
+
+<!-- Navbar (sit on top) -->
+	<div class="w3-top">
+  		<div class="w3-bar w3-blue-gray w3-padding-16 w3-card w3-opacity-min" style="letter-spacing:4px;">
+    		<a href="index.html" class="w3-bar-item w3-button w3-xxlarge  w3-margin-left w3-round-large">NYC Motor Vehicle Collision Report</a>
+    <!-- Right-sided navbar links. Hide them on small screens -->
+		<div class="w3-right w3-hide-medium w3-xlarge w3-margin-right">
+        <div class="w3-dropdown-hover w3-blue-gray">
+          <button  class="w3-bar-item w3-button w3-hover-white ">Chart</button>
+          <div class="w3-dropdown-content w3-bar-block   w3-round-xxlarge">
+            <a href="chart.html" class="w3-bar-item w3-button  w3-round-xlarge  w3-medium">Total Collisions</a>
+            <a href="chart2.html" class="w3-bar-item w3-button  w3-round-xlarge  w3-medium">Type of Injury</a>
+            <a href="#" class="w3-bar-item w3-button  w3-round-xlarge  w3-medium">Pie Chart</a>
+          </div>
+         </div>
+
+      <!--<a href="#" class="w3-bar-item w3-button   w3-round-large">Table</a>-->
+      <a href="initmap.html" class="w3-bar-item w3-button  w3-round-large">Map</a>
+		</div>
+  		</div>
+	</div>
+
+<!-- Header -->
+<header class="w3-display-container w3-content w3-wide" style="max-width:1600px;min-width:500px" id="home">
+  <img class=" w3-opacity-min" src="../static/head_image.jpg" alt="head image" width="1600" height="600">
+
+</header>
+<br/>
+  <h1> Traffic Collisions in NYC</h1>
+  <div id="pie"></div>
+  <select id="selDataset" onchange="getData(this.value)">
+    <option>---</option>
+    <option value="datasetWKD">Weekdays</option>pieplot_WM
+    <option value="datasetMO">Month</option>
+
+  </select>
+  <script>
+      function init(csvname, column, labelsColumn) {
+  var values=[]
+  var labels=[]
+//document.write(csvname)
+//document.write(column)
+//document.write(labelsColumn)
+  d3.csv(csvname, function (data)
+  {
+        //document.write(3)
+      for ( var i=0; i < data.length; i++){
+        values.push(data[i][column]);
+        labels.push(data[i][labelsColumn]);
+      }
+      //document.write(2)
+      var data = [{
+        values: values,
+        labels: labels,
+        type: "pie"
+      }];
+
+        var layout = {
+          height: 500,
+          width: 650
+        };
+
+        Plotly.newPlot("pie", data, layout);
+  });
+}
+
+  function updatePlotly(newdata) {
+    var PIE = document.getElementById("pie");
+    Plotly.restyle(PIE, "values", [newdata]);
+  }
+
+  function getData(dataset) {
+  //document.write(1)
+    var csvname="";
+    var column="";
+    var labels="";
+    switch (dataset) {
+    case "datasetWKD":
+      csvname="http://localhost:5000/weekday_borough"
+      column="Total_Accidents"
+      labels="WEEKDAY"
+      break;
+    case "datasetMO":
+      csvname="http://localhost:5000/month_borough"
+      column="Total_Accidents"
+      labels="MONTH"
+      break;
+    default:
+      csvname="http://localhost:5000/borough_summary"
+      column="Number_of_Accidents"
+      labels="BOROUGH"
+    break;
+    }
+  //updatePlotly(data);
+  init(csvname, column, labels);
+}
+
+init("http://localhost:5000/borough_summary", "Number_of_Accidents", "BOROUGH");
+  </script>
+
+<br><br><br><br><br><br><br>
+
+    <div class="w3-col m3 w3-container w3-margin-top w3-margin-left w3-large"  >
+
+
+
+      <p class="w3-text-grey w3-xlarge">This plot shows percentage of accidents per borough in its default setting, please make your selection from the dropdown menu to view weekday and monthly breakdown of the accident occurrences.</p>
+
+    </div>
+  <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<a href="chart2.html" class="previous">&laquo; Previous Chart(Type of Injury)</a>
+
+
+<footer class="w3-center w3-light-grey w3-padding-32">
+  <p class="w3-large">Made by Khalid Ettalii, Ryan Michels, Jingyi Xu, Alla Zbiru </p>
+</footer>
+</body>
+
+</html>

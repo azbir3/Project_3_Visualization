@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>NYC Motor Vehicle Collision Report</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<style>
+body {font-family: "Times New Roman", Georgia, Serif;}
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Playfair Display";
+  letter-spacing: 5px;
+}
+</style>
+
+<style> /* set the CSS */
+    #pie{
+        margin-left: 300px;
+        float: left;
+        margin-top: 20px;
+     }
+    h1{
+        text-align: center;
+
+     }
+
+    .previous {
+        font-size: 20px;
+        background-color: #fcfcfc;
+        color: black;
+        margin-left: 720px;
+     }
+
+    .next {
+        font-size: 20px;
+        background-color: #879da7;
+        color: white;
+    }
+
+.round {
+  border-radius: 50%;
+}
+</style>
+<link rel="shortcut icon" type="image/x-icon" href="../static/icon.png" />
+<body>
+
+
+<!-- Navbar (sit on top) -->
+	<div class="w3-top">
+  		<div class="w3-bar w3-blue-gray w3-padding-16 w3-card w3-opacity-min" style="letter-spacing:4px;">
+    		<a href="index.html" class="w3-bar-item w3-button w3-xxlarge  w3-margin-left w3-round-large">NYC Motor Vehicle Collision Report</a>
+    <!-- Right-sided navbar links. Hide them on small screens -->
+		<div class="w3-right w3-hide-medium w3-xlarge w3-margin-right">
+        <div class="w3-dropdown-hover w3-blue-gray">
+          <button  class="w3-bar-item w3-button w3-hover-white ">Chart</button>
+          <div class="w3-dropdown-content w3-bar-block   w3-round-xxlarge">
+            <a href="chart.html" class="w3-bar-item w3-button  w3-round-xlarge  w3-medium">Total Collisions</a>
+            <a href="chart2.html" class="w3-bar-item w3-button  w3-round-xlarge  w3-medium">Type of Injury</a>
+            <a href="chart3.html" class="w3-bar-item w3-button  w3-round-xlarge  w3-medium">Pie Chart</a>
+          </div>
+         </div>
+
+      <!--<a href="#" class="w3-bar-item w3-button   w3-round-large">Table</a>-->
+      <a href="initmap.html" class="w3-bar-item w3-button  w3-round-large">Map</a>
+		</div>
+  		</div>
+	</div>
+
+<!-- Header -->
+<header class="w3-display-container w3-content w3-wide" style="max-width:1600px;min-width:500px" id="home">
+  <img class=" w3-opacity-min" src="../static/head_image.jpg" alt="head image" width="1600" height="600">
+
+</header>
+<br/>
+  <h1> Type of Injury</h1>
+  <div id="pie"></div>
+
+
+  <select id="selDataset" onchange="getData(this.value)">
+    <option>---</option>
+    <option value="datasetBX">BRONX</option>
+    <option value="datasetBR">BROOKLYN</option>
+    <option value="datasetMH">MANHATTAN</option>
+    <option value="datasetQS">QUEENS</option>
+    <option value="datasetSI">STATEN ISLAND</option>
+  </select>
+  <script src="../static/donut_type_injury.js"></script>
+<br><br><br><br><br><br><br>
+
+    <div class="w3-col m3 w3-container w3-margin-top w3-margin-left w3-large"  >
+
+
+
+      <p class="w3-text-grey w3-xlarge">This plot shows comparison by type of the injury with an option of viewing the outcome in total (default view) or by selecting respective borough from the drop-down menu.  From the plot we can see that majority of the accidents resulted in no injury reported.</p>
+
+    </div>
+  <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+<a href="chart.html" class="previous">&laquo; Previous Chart(Total Collisions)</a>
+<a href="chart3.html" class="next">Next Chart(Pie Chart) &raquo;</a>
+
+<footer class="w3-center w3-light-grey w3-padding-32">
+  <p class="w3-large">Made by Khalid Ettalii, Ryan Michels, Jingyi Xu, Alla Zbiru </p>
+</footer>
+
+</body>
+</html>

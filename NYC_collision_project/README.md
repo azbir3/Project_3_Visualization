@@ -1,7 +1,5 @@
 **Visualizing Motor Vehicle Collisions in NYC**
 
-Ameya Tayade (N12574690) Email: aat404@nyu.edu, Net ID: aat404
-
 **Guide to source code**
 
 1. index.html

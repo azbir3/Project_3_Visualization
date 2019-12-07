@@ -18,11 +18,7 @@ Visualizing each incident of motor vehicle collisions on a map will empower the 
 
 This tool will is developed by utilizing NYC open data of motor vehicle collisions available from the url: [https://data.cityofnewyork.us/Public-Safety/NYPD-Motor-Vehicle-Collisions/h9gi-nx95](https://data.cityofnewyork.us/Public-Safety/NYPD-Motor-Vehicle-Collisions/h9gi-nx95)
 
-Project page (on Github): [https://github.com/NYU-CS6313-Fall16/Motor-Vehicle-Colision-21](https://github.com/NYU-CS6313-Fall16/Motor-Vehicle-Colision-21)
-
 Video: [https://vimeo.com/196913599](https://vimeo.com/196913599)
-
-Working demo: [https://ameyatayade90.github.io/](https://ameyatayade90.github.io/)
 
 **What is the problem you want to solve and who has this problem?**
 

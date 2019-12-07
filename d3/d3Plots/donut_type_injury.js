@@ -20,7 +20,7 @@ function init(csvname, column) {
           width: 650
        };
       
-        Plotly.plot("pie", data, layout);
+        Plotly.newPlot("pie", data, layout);
   });
 }
   

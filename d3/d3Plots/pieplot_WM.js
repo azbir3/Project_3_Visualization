@@ -1,4 +1,4 @@
-function init(csvname, column, labels) { 
+function init(csvname, column, labelsColumn) { 
   var values=[]
   var labels=[]
 
@@ -6,7 +6,7 @@ function init(csvname, column, labels) {
   {
       for ( var i=0; i < data.length; i++){
         values.push(data[i][column]);
-        labels.push(data[i].BOROUGH);
+        labels.push(data[i][labelsColumn]);
       }
       var data = [{
         values: values,
@@ -19,7 +19,7 @@ function init(csvname, column, labels) {
           width: 650
         };
       
-        Plotly.plot("pie", data, layout);
+        Plotly.newPlot("pie", data, layout);
   });
 }
   
@@ -31,25 +31,20 @@ function init(csvname, column, labels) {
   function getData(dataset) {
     var csvname="";
     var column="";
-    //var labels="";
+    var labels="";
     switch (dataset) {
     case "datasetWKD":
-      csvname="weekday_borough.csv"
-      column="Total Accidents"
+      csvname="../data/weekday_borough.csv"
+      column="Total_Accidents"
       labels="WEEKDAY"
-      //labels = ["Sunday", "Monday", "Tuesday", "Wednessday", "Thursday", "Friday", "Saturday"]
-      //labels.push(data[i].WEEKDAY);
       break;
     case "datasetMO":
-      csvname="month_borough.csv"
+      csvname="../data/month_borough.csv"
       column="Total_Accidents"
       labels="MONTH"
       break;
-    // case "dataset19":
-    //   data = [19696, 38958, 23543, 34978, 3223];
-    //   break;
     default: 
-      csvname="borough_summary.csv"
+      csvname="../data/borough_summary.csv"
       column="Number_of_Accidents"
       labels="BOROUGH"
     break;

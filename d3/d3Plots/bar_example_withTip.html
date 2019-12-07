@@ -1,0 +1,144 @@
+
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body {
+  font: 10px sans-serif;
+  text-align: center;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.bar:hover {
+  fill: gray ;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+}
+
+/* Create a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+</style>
+<link rel="stylesheet" type="text/css" href="main.css">
+<body>
+<h1>Total Collisions per Borough</h1>
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+<script type="text/javascript">
+
+//Set up margin and percentage formatter
+var margin = {top: 40, right: 20, bottom: 30, left: 40},
+    width = 800 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+var formatPercent = d3.format(".0%");
+
+//Create x and y scale
+var x = d3.scale.ordinal().rangeRoundBands([0, width], .1);
+var y = d3.scale.linear().range([height, 0]);
+
+//Create X and Y Axis based on scales and data
+var xAxis = d3.svg.axis().scale(x).orient("bottom");
+var yAxis = d3.svg.axis().scale(y).orient("left").tickFormat(formatPercent);
+
+//Create category for color
+var c10 = d3.scale.category10();
+
+// Initialize tool tip
+var tip = d3.tip()
+  .attr('class', 'd3-tip')
+  .offset([-10, 0])
+  .html(function(d) {
+    return "<strong>Number of Accidents:</strong> <span style='color:red'>" + d.Number_of_Accidents + "</span>";
+  })
+
+//Create SVG Element
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+// Create tooltip in the chart
+svg.call(tip);
+
+//Load data from external csv file
+d3.csv("../data/barTipExample.csv", function(data) {
+    console.log(data);
+    //debugger;
+  x.domain(data.map(function(d){ return d.BOROUGH; }));
+  y.domain([0,d3.max(data, function(d){ return d.Percentage_of_Accidents; })]);
+
+  //Add X Axis
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+
+  //Add Y Axis
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Accidents");
+
+  //Add bars
+  svg.selectAll(".bar")
+      .data(data)
+    .enter().append("rect")
+      .attr("class", "bar")
+      .attr("fill","steelblue")
+      .attr("y","0")
+      .on('mouseover', tip.show)
+      .on('mouseout', tip.hide)
+    .transition()
+      .ease("polyin")
+      .duration(2000)
+      .attr("fill", function(d,i){
+          return c10(Math.random()*10*i); })
+      .attr("x", function(d) { return x(d.BOROUGH); })
+      .attr("width", x.rangeBand())
+      .attr("y", function(d) { return y(d.Percentage_of_Accidents); })
+      .attr("height", function(d) { return height - y(d.Percentage_of_Accidents); })
+
+});
+
+
+</script>

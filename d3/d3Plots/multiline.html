@@ -1,10 +1,13 @@
-<!-- borrowed from https://gist.github.com/d3noob/e99a762017060ce81c76 -->
-
 <!DOCTYPE html>
 <meta charset="utf-8">
 <style> /* set the CSS */
 
 body { font: 12px Arial;}
+
+h1 {
+    text-align: center;
+   
+}
 
 path { 
     stroke: steelblue;
@@ -21,7 +24,7 @@ path {
 }
 
 .legend {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: bold;
     text-anchor: middle;
 }
@@ -35,12 +38,12 @@ path {
 <script>
 
 // Set the dimensions of the canvas / graph
-var margin = {top: 30, right: 20, bottom: 70, left: 50},
-    width = 800 - margin.left - margin.right,
+var margin = {top: 30, right: 30, bottom: 70, left: 50},
+    width = 900 - margin.left - margin.right,
     height = 550 - margin.top - margin.bottom;
 
 // Parse the date / time
-var parseDate = d3.time.format("%b %Y").parse;
+var parseDate = d3.time.format("%b-%Y").parse;
 
 // Set the ranges
 var x = d3.time.scale().range([0, width]);
@@ -48,13 +51,14 @@ var y = d3.scale.linear().range([height, 0]);
 
 // Define the axes
 var xAxis = d3.svg.axis().scale(x)
-    .orient("bottom").ticks(5);
+    .orient("bottom").ticks(18);
 
 var yAxis = d3.svg.axis().scale(y)
     .orient("left").ticks(5);
 
 // Define the line
 var accidents = d3.svg.line()	
+    .interpolate("linear")
     .x(function(d) { return x(d.date); })
     .y(function(d) { return y(d.incident); });
     
@@ -84,16 +88,18 @@ d3.csv("../data/line_monthYr_borough.csv", function(error, data) {
         .key(function(d) {return d.borough;})
         .entries(data);
 
-    var color = d3.scale.category10();   // set the colour scale
+    // set the colour scale
+    var color = d3.scale.category10();   
 
-    legendSpace = width/dataNest.length; // spacing for the legend
+    // spacing for the legend
+    legendSpace = width/dataNest.length; 
 
     // Loop through each borough / key
-    dataNest.forEach(function(d,i) { 
+    dataNest.forEach(function(d, i) { 
 
         svg.append("path")
             .attr("class", "line")
-            .style("stroke", function() { // Add the colours dynamically
+            .style("stroke", function() { // Add the colors dynamically
                 return d.color = color(d.key); })
             .attr("id", 'tag'+d.key.replace(/\s+/g, '')) // assign ID
             .attr("d", accidents(d.values));
@@ -129,7 +135,88 @@ d3.csv("../data/line_monthYr_borough.csv", function(error, data) {
     // Add the Y Axis
     svg.append("g")
         .attr("class", "y axis")
-        .call(yAxis);
+        .call(yAxis)
+        .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end")
+        .text("No of Accidents");
+
+    // //create a moving bar and accident balance for mouseover function
+    // var mouseG = svg.append("g")
+    //   .attr("class", "mouse-over-effects");
+
+    // mouseG.append("path") // this is the black vertical line to follow mouse
+    //   .attr("class", "mouse-line")
+    //   .style("stroke", "black")
+    //   .style("stroke-width", "1px")
+    //   .style("opacity", "0");
+
+    // var lines = document.getElementsByClassName('line');
+
+    // var mousePerLine = mouseG.selectAll('.mouse-per-line')
+    //   .data(data)
+    //   .enter()
+    //   .append("g")
+    //   .attr("class", "mouse-per-line");
+
+    // mousePerLine.append("circle")
+    //   .attr("r", 7)
+    //   .style("stroke", function (d) {
+    //     return color(d.key);
+    //   })
+    //   .style("fill", "none")
+    //   .style("stroke-width", "1px")
+    //   .style("opacity", "0");
+
+    // mousePerLine.append("text")
+    //   .attr("transform", "translate(10,3)");
+
+    // mouseG.append('svg:rect') // append a rect to catch mouse movements on canvas
+    //   .attr('width', width) // can't catch mouse events on a g element
+    //   .attr('height', height)
+    //   .attr('fill', 'none')
+    //   .attr('pointer-events', 'all')
+    //   .on('mouseout', function () { // on mouse out hide line, circles and text
+    //     d3.select(".mouse-line")
+    //       .style("opacity", "0");
+    //     d3.selectAll(".mouse-per-line circle")
+    //       .style("opacity", "0");
+    //     d3.selectAll(".mouse-per-line text")
+    //       .style("opacity", "0");
+    //   })
+    //   .on('mouseover', function () { // on mouse in show line, circles and text
+    //     d3.select(".mouse-line")
+    //       .style("opacity", "1");
+    //     d3.selectAll(".mouse-per-line circle")
+    //       .style("opacity", "1");
+    //     d3.selectAll(".mouse-per-line text")
+    //       .style("opacity", "1");
+    //   })
+    //   .on('mousemove', function () { // mouse moving over canvas
+    //   //debugger;
+    //     var mouse = d3.mouse(this);
+
+    //     d3.selectAll(".mouse-per-line")
+    //       .attr("transform", function (d, i) {
+
+    //         var xDate = x.invert(mouse[0]),
+    //           bisect = d3.bisector(function (d) { return d.date; }).left;
+    //         idx = bisect(d.values, xDate);
+
+    //         d3.select(this).select('text')
+    //           .text(y.invert(y(d.values[idx].incident)).toFixed(2));
+
+    //         d3.select(".mouse-line")
+    //           .attr("d", function () {
+    //             var data = "M" + x(d.values[idx].date) + "," + height;
+    //             data += " " + x(d.values[idx].date) + "," + 0;
+    //             return data;
+    //           });
+    //         return "translate(" + x(d.values[idx].date) + "," + y(d.values[idx].incident) + ")";
+    //       });
+    //   });
 
 });
 

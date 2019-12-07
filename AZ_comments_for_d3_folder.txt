@@ -1,0 +1,18 @@
+d3 folder holds visualization files (code, source, html for localhost viewing).
+
+Initially I attempted to use dimplejs library to satisfy project requirements.
+I downloaded all that I was instructed and it downgraded python to 2.7 version,
+but also messed up ability to connect to the SQLalchemy, run Flask, or node commands.
+The issue was not fixed until Dec 3rd with Matt W help(which was too late to 
+reprocess all the plots for the presetnation). I attempted to resolve the issue
+with Matt's assistance remotely during last week of Nov, but unseccessfuly.  
+As a result, all plots are sourced from csv files with Matt's approval.
+
+Run localhost command on d3 folder (py -m http.server) and you will see the list of the active links
+to the available plots. Please note that not all plots were used in the dashboard.
+I left other plots in, as a showcase of the work done.
+
+Folders and their contents - 
+- d3Plots - holds all code files
+- Data - holds all the supporting csv's.
+- images - holds screenshots of the executed plots.

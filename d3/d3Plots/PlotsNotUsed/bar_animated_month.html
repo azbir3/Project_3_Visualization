@@ -20,7 +20,7 @@
   <link rel="stylesheet" type="text/css" href="main.css">
 </head>
 <body>
-  <h1>Total 2019 Collisions per Day of the Week</h1>
+  <h1>Total 2018 Collisions per Month</h1>
   <script type="text/javascript">
     //Set up margin and percentage formatter
     var margin = {top:20, right: 30, bottom: 30, left:40};
@@ -39,10 +39,10 @@
     //Create category for color
     var c10 = d3.scale.category10();
     //Load data from external tsv file
-    d3.csv("../data/weekday_borough.csv", function(data){
+    d3.csv("../../data/month_borough.csv", function(data){
       //Set domain of x and y scales based on loaded data
       yScale.domain([0,d3.max(data, function(d){ return d.Total_Accidents; })]);
-      xScale.domain(data.map(function(d){ return d.WEEKDAY; }));
+      xScale.domain(data.map(function(d){ return d.MONTH; }));
       //Create X and Y Axis based on scales and data
       var xAxis = d3.svg.axis()
                 .scale(xScale)
@@ -70,7 +70,7 @@
                       return yScale(d.Total_Accidents);
                     })
                     .attr("x", function(d){
-                      return xScale(d.WEEKDAY);
+                      return xScale(d.MONTH);
                     })              
                     .attr("height", function(d){
                       return height-yScale(d.Total_Accidents);

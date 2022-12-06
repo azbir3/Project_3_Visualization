@@ -10,7 +10,7 @@
     },
     "devDependencies": {
         "requirejs": "2.3.2",
-        "express": "4.14.0",
+        "express": "4.17.3",
         "grunt": "1.0.1",
         "grunt-jslint": "1.1.14",
         "grunt-contrib-concat": "1.0.1",
